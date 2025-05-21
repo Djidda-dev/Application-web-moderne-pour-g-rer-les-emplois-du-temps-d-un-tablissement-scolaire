@@ -1,0 +1,28 @@
+.cours-card {
+    border-left: 4px solid #0d6efd;
+    transition: transform 0.2s;
+}
+
+.cours-card:hover {
+    transform: translateX(5px);
+    background-color: #e9f2ff !important;
+}
+
+.table th {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.9em;
+    }
+    
+    .cours-card {
+        padding: 0.5rem !important;
+    }
+    
+    .heure {
+        display: none;
+    }
+}

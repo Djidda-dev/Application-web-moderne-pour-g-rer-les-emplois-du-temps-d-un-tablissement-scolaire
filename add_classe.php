@@ -1,4 +1,5 @@
-<?php require_once 'database.php'; 
+<?php 
+require_once 'database.php'; 
 try { 
     // Récupération des classes
     $classes = $pdo->query("SELECT * FROM classes ORDER BY NIVEAU")->fetchAll(); 
@@ -57,6 +58,14 @@ try {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <?= htmlspecialchars($classe['NIVEAU']) ?>
                         <span class="badge bg-primary rounded-pill">ID: <?= $classe['ID_CLASSE'] ?></span>
+                        
+                        <div>
+                            <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $classe['ID_CLASSE'] ?>" data-niveau="<?= htmlspecialchars($classe['NIVEAU']) ?>" data-bs-toggle="modal" data-bs-target="#editModal">Modifier</button>
+                            <form action="delete_classe.php" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette classe ?')">
+                                <input type="hidden" name="id_classe" value="<?= $classe['ID_CLASSE'] ?>">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -66,24 +75,56 @@ try {
 
 <script>
     $(document).ready(function() {
-        $("#form-classe").submit(function(event) {
-            event.preventDefault(); // Empêche le rechargement de la page
+    $("#form-classe").submit(function(event) {
+        event.preventDefault();
 
+        $.ajax({
+            type: "POST",
+            url: "save_classe.php",
+            data: $(this).serialize(),
+            success: function(response) {
+                $("#liste-classes").append(response);
+                alert("Classe ajoutée avec succès !");
+                $("#niveau").val("");
+
+                // Mettre à jour les événements AJAX des nouveaux boutons
+                updateEvents();
+            },
+            error: function() {
+                alert("Une erreur est survenue.");
+            }
+        });
+    });
+
+    function updateEvents() {
+        $(".btn-edit").click(function() {
+            const idClasse = $(this).data("id");
+            const niveauClasse = $(this).data("niveau");
+
+            $("#edit-id").val(idClasse);
+            $("#edit-niveau").val(niveauClasse);
+        });
+
+        $("#saveEdit").click(function() {
             $.ajax({
                 type: "POST",
-                url: "save_classe.php",
-                data: $(this).serialize(),
+                url: "update_classe.php",
+                data: $("#form-edit-classe").serialize(),
                 success: function(response) {
-                    $("#liste-classes").append(response); // Ajoute la nouvelle classe à la liste
-                    alert("Classe ajoutée avec succès !");
-                    $("#niveau").val(""); // Réinitialise le champ
+                    alert("Classe modifiée avec succès !");
+                    location.reload();
                 },
                 error: function() {
                     alert("Une erreur est survenue.");
                 }
             });
         });
-    });
+    }
+
+    // Activer les événements AJAX au chargement de la page
+    updateEvents();
+});
+
 </script>
 
 </body>

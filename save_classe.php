@@ -1,4 +1,6 @@
-<?php require_once 'database.php'; 
+<?php 
+require_once 'database.php'; 
+
 try {
     if (empty($_POST['niveau']) || empty($_POST['id_filiere'])) {
         throw new Exception("Tous les champs doivent être remplis.");
@@ -20,7 +22,15 @@ try {
     $new_id = $pdo->lastInsertId();
     echo '<li class="list-group-item d-flex justify-content-between align-items-center">' . 
          htmlspecialchars($niveau) . 
-         '<span class="badge bg-primary rounded-pill">ID: ' . $new_id . '</span></li>';
+         '<span class="badge bg-primary rounded-pill">ID: ' . $new_id . '</span>' .
+         '<div>
+            <button class="btn btn-warning btn-sm btn-edit" data-id="' . $new_id . '" data-niveau="' . htmlspecialchars($niveau) . '" data-bs-toggle="modal" data-bs-target="#editModal">Modifier</button>
+            <form action="delete_classe.php" method="POST" class="d-inline" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer cette classe ?\')">
+                <input type="hidden" name="id_classe" value="' . $new_id . '">
+                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+            </form>
+        </div>' .
+         '</li>';
 } catch (Exception $e) {
     http_response_code(400);
     echo $e->getMessage();

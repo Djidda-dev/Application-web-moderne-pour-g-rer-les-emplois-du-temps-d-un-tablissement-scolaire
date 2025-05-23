@@ -47,11 +47,11 @@
     <div class="sidebar">
         <h4 class="text-center text-white mb-4">Tableau de bord</h4>
         <a href="#" class="nav-link"><i class="fas fa-home"></i> Accueil</a>
-        <a href="#professeurs" class="nav-link"><i class="fas fa-user-tie"></i> Professeurs</a>
+        <a href="#classes" class="nav-link"><i class="fas fa-school"></i> Classes</a>
         <a href="#modules" class="nav-link"><i class="fas fa-book"></i> Modules</a>
         <a href="#filieres" class="nav-link"><i class="fas fa-graduation-cap"></i> Filières</a>
+        <a href="#professeurs" class="nav-link"><i class="fas fa-user-tie"></i> Professeurs</a>
         <a href="#salles" class="nav-link"><i class="fas fa-building"></i> Salles</a>
-        <a href="#classes" class="nav-link"><i class="fas fa-school"></i> Classes</a>
         <a href="#seances" class="nav-link"><i class="fas fa-calendar"></i> Séances</a>
         <a href="#etudiants" class="nav-link"><i class="fas fa-users"></i> Étudiants</a>
     </div>
@@ -61,15 +61,16 @@
         <h2 class="text-center my-4">Gestion des données</h2>
         
         <div class="row g-4">
-            <!-- Professeurs -->
-            <div class="col-lg-4 col-md-6" id="professeurs">
+
+                        <!-- Classes -->
+            <div class="col-lg-4 col-md-6" id="classes">
                 <div class="card text-center">
-                    <div class="card-header bg-primary text-white">
-                        <i class="fas fa-user-tie fa-2x"></i> Professeurs
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-school fa-2x"></i> Classes
                     </div>
                     <div class="card-body">
-                        <p>Gérer les professeurs : ajouter, modifier ou supprimer.</p>
-                        <a href="add_prof.php" class="btn btn-primary">Gérer les Professeurs</a>
+                        <p>Gérer les classes : ajouter, modifier ou supprimer.</p>
+                        <a href="add_classe.php" class="btn btn-warning">Gérer les Classes</a>
                     </div>
                 </div>
             </div>
@@ -100,6 +101,19 @@
                 </div>
             </div>
 
+                        <!-- Professeurs -->
+            <div class="col-lg-4 col-md-6" id="professeurs">
+                <div class="card text-center">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-user-tie fa-2x"></i> Professeurs
+                    </div>
+                    <div class="card-body">
+                        <p>Gérer les professeurs : ajouter, modifier ou supprimer.</p>
+                        <a href="add_prof.php" class="btn btn-primary">Gérer les Professeurs</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Salles -->
             <div class="col-lg-4 col-md-6" id="salles">
                 <div class="card text-center">
@@ -109,19 +123,6 @@
                     <div class="card-body">
                         <p>Gérer les salles : ajouter, modifier ou supprimer.</p>
                         <a href="add_salle.php" class="btn btn-info">Gérer les Salles</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Classes -->
-            <div class="col-lg-4 col-md-6" id="classes">
-                <div class="card text-center">
-                    <div class="card-header bg-warning text-dark">
-                        <i class="fas fa-school fa-2x"></i> Classes
-                    </div>
-                    <div class="card-body">
-                        <p>Gérer les classes : ajouter, modifier ou supprimer.</p>
-                        <a href="add_classe.php" class="btn btn-warning">Gérer les Classes</a>
                     </div>
                 </div>
             </div>

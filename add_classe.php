@@ -17,6 +17,7 @@ try {
     <title>Gestion des Classes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Ajout du script Bootstrap -->
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -60,7 +61,7 @@ try {
                         <span class="badge bg-primary rounded-pill">ID: <?= $classe['ID_CLASSE'] ?></span>
                         
                         <div>
-                            <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $classe['ID_CLASSE'] ?>" data-niveau="<?= htmlspecialchars($classe['NIVEAU']) ?>" data-bs-toggle="modal" data-bs-target="#editModal">Modifier</button>
+                            <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $classe['ID_CLASSE'] ?>" data-niveau="<?= htmlspecialchars($classe['NIVEAU']) ?>">Modifier</button>
                             <form action="delete_classe.php" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette classe ?')">
                                 <input type="hidden" name="id_classe" value="<?= $classe['ID_CLASSE'] ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
@@ -73,8 +74,32 @@ try {
     </div>
 </div>
 
+<!-- Modal de modification -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier la classe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-edit-classe">
+                    <input type="hidden" name="id_classe" id="edit-id">
+                    <label class="form-label" for="edit-niveau">Nom de la classe :</label>
+                    <input type="text" name="niveau" id="edit-niveau" class="form-control" required>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success" id="saveEdit">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     $("#form-classe").submit(function(event) {
         event.preventDefault();
 
@@ -87,8 +112,7 @@ try {
                 alert("Classe ajoutée avec succès !");
                 $("#niveau").val("");
 
-                // Mettre à jour les événements AJAX des nouveaux boutons
-                updateEvents();
+                updateEvents(); // Mettre à jour les événements AJAX
             },
             error: function() {
                 alert("Une erreur est survenue.");
@@ -97,15 +121,17 @@ try {
     });
 
     function updateEvents() {
-        $(".btn-edit").click(function() {
+        $(document).on("click", ".btn-edit", function() {
             const idClasse = $(this).data("id");
             const niveauClasse = $(this).data("niveau");
 
             $("#edit-id").val(idClasse);
             $("#edit-niveau").val(niveauClasse);
+
+            $("#editModal").modal("show"); // Afficher le modal
         });
 
-        $("#saveEdit").click(function() {
+        $(document).on("click", "#saveEdit", function() {
             $.ajax({
                 type: "POST",
                 url: "update_classe.php",
@@ -121,10 +147,8 @@ try {
         });
     }
 
-    // Activer les événements AJAX au chargement de la page
-    updateEvents();
+    updateEvents(); // Activer les événements AJAX au chargement de la page
 });
-
 </script>
 
 </body>

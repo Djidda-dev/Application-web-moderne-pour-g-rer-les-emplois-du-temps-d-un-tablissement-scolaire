@@ -1,34 +1,44 @@
 <?php
 require_once 'database.php';
-header('Content-Type: text/plain');
 
 try {
-    // Vérification des champs requis
     if (empty($_POST['nom_filiere']) || empty($_POST['description'])) {
-        throw new Exception("Tous les champs doivent être remplis.");
+        throw new Exception("Tous les champs doivent être remplis");
     }
 
-    $nom_filiere = trim($_POST['nom_filiere']);
-    $description = trim($_POST['description']);
+    $nom = trim($_POST['nom_filiere']);
+    $desc = trim($_POST['description']);
 
-    // Vérification si la filière existe déjà
+    // Vérification existence
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM filieres WHERE NOM_FILIERE = ?");
-    $stmt->execute([$nom_filiere]);
+    $stmt->execute([$nom]);
     if ($stmt->fetchColumn() > 0) {
-        throw new Exception("Cette filière existe déjà.");
+        throw new Exception("Cette filière existe déjà");
     }
 
-    // Insertion dans la base
-    $insert = $pdo->prepare("INSERT INTO filieres (NOM_FILIERE, DESCRIPTION) VALUES (?, ?)");
-    $insert->execute([$nom_filiere, $description]);
+    // Insertion
+    $stmt = $pdo->prepare("INSERT INTO filieres (NOM_FILIERE, DESCRIPTION) VALUES (?, ?)");
+    $stmt->execute([$nom, $desc]);
+    $newId = $pdo->lastInsertId();
 
-    // Récupérer l'ID de la nouvelle filière
-    $new_id = $pdo->lastInsertId();
+    // Retour HTML
+    echo '<li class="list-group-item d-flex justify-content-between align-items-center" data-id="'.$newId.'">
+            <div>
+                '.htmlspecialchars($nom).'
+                <div class="text-muted small">'.htmlspecialchars($desc).'</div>
+            </div>
+            <div>
+                <span class="badge bg-primary rounded-pill me-2">ID: '.$newId.'</span>
+                <button class="btn btn-warning btn-sm btn-edit"
+                        data-id="'.$newId.'"
+                        data-nom="'.htmlspecialchars($nom).'"
+                        data-description="'.htmlspecialchars($desc).'">
+                    Modifier
+                </button>
+                <button class="btn btn-danger btn-sm btn-delete" data-id="'.$newId.'">Supprimer</button>
+            </div>
+          </li>';
 
-    // Retourner le nouvel élément HTML
-    echo '<li class="list-group-item d-flex justify-content-between align-items-center">' . 
-         htmlspecialchars($nom_filiere) . 
-         '<span class="badge bg-primary rounded-pill">ID: ' . $new_id . '</span></li>';
 } catch (Exception $e) {
     http_response_code(400);
     echo $e->getMessage();

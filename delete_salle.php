@@ -1,16 +1,16 @@
 <?php
 require_once 'database.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id_prof'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id_salle'])) {
     try {
         $pdo->beginTransaction();
         
-        $id = $_POST['id_prof'];
-        $stmt = $pdo->prepare("DELETE FROM professeurs WHERE ID_PROF = ?");
+        $id = $_POST['id_salle'];
+        $stmt = $pdo->prepare("DELETE FROM salles WHERE ID_SALLE = ?");
         $stmt->execute([$id]);
         
         if ($stmt->rowCount() === 0) {
-            throw new Exception("Professeur introuvable");
+            throw new Exception("Salle introuvable");
         }
         
         $pdo->commit();

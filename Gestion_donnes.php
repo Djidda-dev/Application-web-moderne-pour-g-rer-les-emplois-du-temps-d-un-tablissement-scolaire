@@ -88,6 +88,19 @@
                 </div>
             </div>
 
+                        <!-- Étudiants -->
+            <div class="col-lg-4 col-md-6" id="etudiants">
+                <div class="card text-center">
+                    <div class="card-header bg-dark text-white">
+                        <i class="fas fa-users fa-2x"></i> Étudiants
+                    </div>
+                    <div class="card-body">
+                        <p>Gérer les étudiants : ajouter, modifier ou supprimer.</p>
+                        <a href="add_etudiant.php" class="btn btn-dark">Gérer les Étudiants</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Filières -->
             <div class="col-lg-4 col-md-6" id="filieres">
                 <div class="card text-center">
@@ -140,18 +153,7 @@
                 </div>
             </div>
 
-            <!-- Étudiants -->
-            <div class="col-lg-4 col-md-6" id="etudiants">
-                <div class="card text-center">
-                    <div class="card-header bg-dark text-white">
-                        <i class="fas fa-users fa-2x"></i> Étudiants
-                    </div>
-                    <div class="card-body">
-                        <p>Gérer les étudiants : ajouter, modifier ou supprimer.</p>
-                        <a href="add_etudiant.php" class="btn btn-dark">Gérer les Étudiants</a>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 

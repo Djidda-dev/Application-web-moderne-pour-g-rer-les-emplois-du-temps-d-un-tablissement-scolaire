@@ -19,7 +19,7 @@ $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-light">
     <div class="container py-5">
-        <h1 class="text-center mb-4">Listes des etudiants et modules</h1>
+        <h1 class="text-center mb-4">Listes des etudiants par modules</h1>
         
         <div class="row justify-content-center mb-4">
             <div class="col-md-6">

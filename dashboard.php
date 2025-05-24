@@ -52,7 +52,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=gestion_etudiants', 'root', '', [
         <a href="Gestion_donnes.php" class="nav-link"><i class="fas fa-cogs"></i> Gestion des données</a>
     </div>
 
-    <!-- Contenu principal -->
+
     <div class="content">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
@@ -66,10 +66,8 @@ $pdo = new PDO('mysql:host=localhost;dbname=gestion_etudiants', 'root', '', [
             <!-- Onglets -->
         <ul class="nav nav-tabs">
             <li class="nav-item"><a class="nav-link active" href="#" data-tab="emploi">Emploi du temps</a></li>
-            <li class="nav-item"><a class="nav-link" href="add_etudiant.php" data-tab="etudiants">Étudiants</a></li>
-            <li class="nav-item"><a class="nav-link" href="add_module.php" data-tab="modules">Modules</a></li>
+            <li class="nav-item"><a class="nav-link" href="selection_classe.php" data-tab="etudiants">Étudiants/modules</a></li>
             <li class="nav-item"><a class="nav-link" href="graphique_charge_horaire.php" data-tab="graphique">Graphique des Professeurs</a></li>
-            <li class="nav-item"><a class="nav-link" href="add_seance.php" data-tab="seances">Saisie des Séances</a></li>
             <li class="nav-item"><a class="nav-link" href="Gestion_donnes.php" data-tab="gestion">Gestion des données</a></li>
         </ul>
 

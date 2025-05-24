@@ -1,8 +1,6 @@
 <?php
 // Connexion à la base de données
-$pdo = new PDO('mysql:host=localhost;dbname=gestion_etudiants', 'root', '', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
+require_once 'database.php';
 
 // Récupération dynamique des classes
 $stmt = $pdo->query("SELECT ID_CLASSE, NIVEAU FROM classes ORDER BY NIVEAU");

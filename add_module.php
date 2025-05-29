@@ -1,4 +1,5 @@
-<?php require_once 'database.php'; 
+<?php 
+require_once 'database.php';
 
 try { 
     $modules = $pdo->query("SELECT * FROM modules ORDER BY NOM_MODULE ASC")->fetchAll(PDO::FETCH_ASSOC); 
@@ -15,6 +16,12 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .volume-horaire {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+    </style>
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -37,6 +44,10 @@ try {
                         <input type="text" name="nom_module" id="nom_module" class="form-control" required maxlength="100">
                     </div>
                     <div class="col-md-4">
+                        <label class="form-label" for="volume_horaire">Volume horaire :</label>
+                        <input type="number" name="volume_horaire" id="volume_horaire" class="form-control" min="1" max="1000" value="30" required>
+                    </div>
+                    <div class="col-12">
                         <label class="form-label" for="description">Description :</label>
                         <input type="text" name="description" id="description" class="form-control" required maxlength="255">
                     </div>
@@ -56,15 +67,22 @@ try {
                 <?php foreach ($modules as $module) : ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center" data-id="<?= $module['ID_MODULE'] ?>">
                         <div>
-                            <?= htmlspecialchars($module['NOM_MODULE']) ?>
+                            <strong><?= htmlspecialchars($module['NOM_MODULE']) ?></strong>
                             <div class="text-muted small"><?= htmlspecialchars($module['DESCRIPTION']) ?></div>
+                            <div class="volume-horaire mt-1">
+                                Volume horaire: <?= $module['volume_horaire'] ?>H
+                                <?php if(isset($module['volume_horaire_restant'])): ?>
+                                    (Reste: <?= $module['volume_horaire_restant'] ?>H)
+                                <?php endif; ?>
+                            </div>
                         </div>
                         <div>
-                            <span class="badge bg-primary rounded-pill me-2">ID: <?= htmlspecialchars($module['ID_MODULE']) ?></span>
+                            <span class="badge bg-primary rounded-pill me-2">ID: <?= $module['ID_MODULE'] ?></span>
                             <button class="btn btn-warning btn-sm btn-edit"
                                     data-id="<?= $module['ID_MODULE'] ?>"
                                     data-nom="<?= htmlspecialchars($module['NOM_MODULE']) ?>"
-                                    data-description="<?= htmlspecialchars($module['DESCRIPTION']) ?>">
+                                    data-desc="<?= htmlspecialchars($module['DESCRIPTION']) ?>"
+                                    data-volume="<?= $module['volume_horaire'] ?>">
                                 Modifier
                             </button>
                             <button class="btn btn-danger btn-sm btn-delete" data-id="<?= $module['ID_MODULE'] ?>">Supprimer</button>
@@ -92,8 +110,12 @@ try {
                         <input type="text" name="nom_module" id="edit-nom" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Volume horaire :</label>
+                        <input type="number" name="volume_horaire" id="edit-volume" class="form-control" min="1" max="1000" required>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Description :</label>
-                        <input type="text" name="description" id="edit-description" class="form-control" required>
+                        <input type="text" name="description" id="edit-desc" class="form-control" required>
                     </div>
                 </form>
             </div>
@@ -119,6 +141,7 @@ $(document).ready(function() {
                 $("#liste-modules").append($newModule);
                 attachEventHandlers();
                 $("#form-module")[0].reset();
+                $("#volume_horaire").val(30);
             },
             error: (xhr) => {
                 $("#error-message").removeClass("d-none").text(xhr.responseText);
@@ -133,7 +156,8 @@ $(document).ready(function() {
             const data = $(this).data();
             $("#edit-id").val(data.id);
             $("#edit-nom").val(data.nom);
-            $("#edit-description").val(data.description);
+            $("#edit-desc").val(data.desc);
+            $("#edit-volume").val(data.volume);
             $("#editModal").modal("show");
         });
 
@@ -160,29 +184,27 @@ $(document).ready(function() {
 
     // Sauvegarde des modifications
     $("#saveEdit").click(() => {
-        const formData = $("#form-edit-module").serializeArray().reduce((obj, item) => {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
+        const formData = {
+            id_module: $("#edit-id").val(),
+            nom_module: $("#edit-nom").val(),
+            description: $("#edit-desc").val(),
+            volume_horaire: $("#edit-volume").val()
+        };
 
         $.ajax({
             type: "POST",
             url: "update_module.php",
-            data: $("#form-edit-module").serialize(),
+            data: formData,
             success: (response) => {
-                const $li = $(`li[data-id="${formData.id_module}"]`);
-                $li.find("div:first").html(`
-                    ${formData.nom_module}
-                    <div class="text-muted small">${formData.description}</div>
-                `);
-                $li.find(".btn-edit")
-                    .data("nom", formData.nom_module)
-                    .data("description", formData.description);
-                
-                $("#editModal").modal("hide");
+                const data = JSON.parse(response);
+                if(data.success) {
+                    location.reload(); // Rechargement simple et efficace
+                } else {
+                    alert("Erreur: " + (data.error || "Inconnue"));
+                }
             },
             error: (xhr) => {
-                alert("Erreur : " + xhr.responseText);
+                alert("Erreur serveur : " + xhr.responseText);
             }
         });
     });

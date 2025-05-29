@@ -71,9 +71,9 @@ try {
                             <div class="text-muted small"><?= htmlspecialchars($module['DESCRIPTION']) ?></div>
                             <div class="volume-horaire mt-1">
                                 Volume horaire: <?= $module['volume_horaire'] ?>H
-                                <?php if(isset($module['volume_horaire_restant'])): ?>
-                                    (Reste: <?= $module['volume_horaire_restant'] ?>H)
-                                <?php endif; ?>
+                                <!-- </?php if(isset($module['volume_horaire_restant'])): ?>
+                                    (Reste: </?= $module['volume_horaire_restant'] ?>H)
+                                </?php endif; ?> -->
                             </div>
                         </div>
                         <div>
